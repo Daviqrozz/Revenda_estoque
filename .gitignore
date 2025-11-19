@@ -1,0 +1,17 @@
+# Variáveis de Ambiente e Segurança
+.env
+
+# Banco de Dados
+db.sqlite3
+*.db
+
+# Python
+__pycache__/
+*.pyc
+
+# Diretórios de Mídia/Uploads (Se você tiver)
+/media/
+
+# Diretórios Gerados pelo Docker (Volumes, etc.)
+# Geralmente não precisa, mas adiciona por segurança se houver volumes locais
+/data/
