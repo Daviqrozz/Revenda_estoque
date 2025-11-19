@@ -1,11 +1,11 @@
 # 📦 Revenda Estoque - Sistema de Gestão de Estoque
 
-## 🚀 Sobre o Projeto
+🚀 Sobre o Projeto
+OO Revenda Estoque é um Sistema de Gestão de Estoque minimalista e eficiente, desenvolvido como um Produto Mínimo Viável (MVP), utilizando o framework Django e o MySQL.
 
-O **Revenda Estoque** é um Sistema de Gestão de Estoque minimalista e eficiente, desenvolvido como um **Produto Mínimo Viável (MVP)**. A aplicação segue a arquitetura **Monolítica (Front-end e Back-end juntos)** utilizando o *framework* Django e o MySQL.
+Inicialmente, fiz esse sistema para me auxiliar no registro e controle dos produtos que adquiro e faço revenda. O principal objetivo é fornecer uma solução rápida para controle de inventário
 
-O principal objetivo é fornecer uma solução rápida para controle de inventário, utilizando a interface administrativa robusta e pronta para uso do **Django Admin** para todas as operações de **CRUD (Criar, Ler, Atualizar, Deletar)**.
-
+O sistema está sujeito a futuras atualizações e refatorações, visando a expansão para múltiplos usuários e a possibilidade de se tornar uma base de API para consumo por outras aplicações.
 ---
 
 ## 🛠️ Tecnologias Utilizadas
@@ -17,18 +17,4 @@ O principal objetivo é fornecer uma solução rápida para controle de inventá
 | **MySQL 8.0** | Banco de Dados Relacional. |
 | **Docker Compose** | Gerenciamento e orquestração do ambiente de desenvolvimento (Contêineres `web` e `db`). |
 
----
 
-## 🏁 Primeiros Passos
-
-Estas instruções guiarão você na configuração e execução do projeto em seu ambiente local usando Docker.
-
-### Pré-requisitos
-
-Certifique-se de ter o **Docker** e o **Docker Compose** instalados em sua máquina.
-
-### 1. Clonar o Repositório
-
-```bash
-git clone [https://www.youtube.com/watch?v=X49Wz3icO3E](https://www.youtube.com/watch?v=X49Wz3icO3E)
-cd revenda_estoque
