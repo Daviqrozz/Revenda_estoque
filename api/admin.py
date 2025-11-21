@@ -10,6 +10,6 @@ admin.site.register(Category)
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     # O Admin usará estas configurações:
-    list_display = ('name', 'category','observation','quantity', 'sale_value','profit')
+    list_display = ('name','status','quantity', 'sale_value','profit')
     list_filter = ('category','sale_value')
     search_fields = ('name', 'observation')

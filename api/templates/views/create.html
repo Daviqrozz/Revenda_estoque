@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastrar Produto{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+
+        <div class="card table-color text-white shadow-lg rounded-3 border-0">
+
+            <div class="card-header header-color border-bottom border-cor-borda pt-3 pb-2">
+                <h2 class="card-title text-center text-white mb-0">
+                    <i class="bi bi-box-seam me-2"></i> Cadastrar Produto
+                </h2>
+            </div>
+
+            <div class="card-body p-4">
+                <form method="post">
+
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control bg-form-input text-white border-cor-borda"
+                            id="id_name_mock" name="name" placeholder="Nome do Produto" required
+                            value="Teclado Mecânico X90">
+                        <label for="id_name_mock" class="text-white-50">Nome do Produto</label>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_category_mock" class="form-label text-white-50 mb-1">Categoria</label>
+                        <select class="form-select bg-form-input text-white border-cor-borda" id="id_category_mock"
+                            name="category" required>
+                            <option value="" disabled>Selecione a Categoria</option>
+                            <option value="1" selected>Periféricos</option>
+                            <option value="2">Videogames</option>
+                            <option value="3">Acessórios</option>
+                        </select>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control bg-form-input text-white border-cor-borda"
+                            id="id_quantity_mock" name="quantity" placeholder="Quantidade" required min="0" value="15">
+                        <label for="id_quantity_mock" class="text-white-50">Quantidade</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="number" step="0.01" class="form-control bg-form-input text-white border-cor-borda"
+                            id="id_cost_mock" name="cost_value" placeholder="Valor de Custo (R$)" required min="0"
+                            value="120.50">
+                        <label for="id_cost_mock" class="text-white-50">Valor de Custo (R$)</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="number" step="0.01" class="form-control bg-form-input text-white border-cor-borda"
+                            id="id_sale_mock" name="sale_value" placeholder="Valor de Venda (R$)" required min="0"
+                            value="180.00">
+                        <label for="id_sale_mock" class="text-white-50">Valor de Venda (R$)</label>
+                    </div>
+
+                    <div class="form-floating mb-4">
+                        <textarea class="form-control bg-form-input text-white border-cor-borda"
+                            id="id_observation_mock" name="observation" placeholder="Observações..."
+                            style="height: 100px">Nova remessa, ótimo estado.</textarea>
+                        <label for="id_observation_mock" class="text-white-50">Observações (Opcional)</label>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+                            <i class="bi bi-plus-circle-fill me-2"></i> Salvar Produto
+                        </button>
+                    </div>
+                </form>
+                <div class="d-grid gap-2 mt-4 w-100">
+                    <a href="/"><button type="submit"
+                            class="btn btn-danger btn-lg shadow-sm text-center">
+                            Cancelar
+                        </button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

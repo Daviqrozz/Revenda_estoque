@@ -1,0 +1,60 @@
+/* api/static/css/custom.css */
+
+:root {
+    /* Variáveis Base do Tema Azul-Escuro */
+    --fundo-base-dark: #1A202C;
+    --fundo-secundario: #2D3748;
+    --cor-borda: #4A5568;
+    --cor-texto-claro: #F7FAFC; 
+    
+    /* Cores de Ação e Status */
+    --cor-primaria-btn: #4C51BF;
+    --cor-sucesso-lucro: #48BB78; 
+    --cor-perigo: #F6AD55;
+}
+
+/* 1. ESTILO DO CORPO PRINCIPAL (main-color) */
+.main-color {
+    /* FORÇA o fundo azul-escuro */
+    background-color: var(--fundo-base-dark) !important; 
+    min-height: 100vh;
+    color: var(--cor-texto-claro); 
+}
+
+/* 2. ESTILO DO CABEÇALHO */
+.header-color {
+    background-color: var(--fundo-base-dark) !important;
+    color: var(--cor-texto-claro);
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+/* 3. ESTILO DA TABELA E CARDS (fundo secundário) */
+.table-color.table {
+    /* Fundo da Tabela com o tom mais claro */
+    --bs-table-bg: var(--fundo-secundario);
+    --bs-table-bg-state: var(--fundo-secundario);
+    --bs-table-border-color: var(--cor-borda); 
+    color: var(--cor-texto-claro);
+}
+
+/* 4. ESTILO DOS INPUTS/FORMS */
+.form-control.bg-form-input,
+.form-select.bg-form-input {
+    background-color: var(--fundo-secundario) !important;
+    border-color: var(--cor-borda) !important;
+    color: var(--cor-texto-claro) !important;
+}
+
+/* 5. CORES CONDICIONAIS */
+.text-lucro-positivo {
+    color: var(--cor-sucesso-lucro) !important;
+    font-weight: bold;
+}
+
+/* Sobrescreve a cor primária do Bootstrap (para o botão Adicionar) */
+.btn-primary, .btn-primary:hover {
+    --bs-btn-bg: var(--cor-primaria-btn);
+    --bs-btn-border-color: var(--cor-primaria-btn);
+    --bs-btn-hover-bg: #5D62D4; /* Tom ligeiramente mais escuro */
+    --bs-btn-hover-border-color: #5D62D4;
+}
