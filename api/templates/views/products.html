@@ -11,10 +11,8 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
 
         <!-- SELECT DE CATEGORIA -->
-        <select class="form-select custom-select-dark w-auto" 
-                aria-label="Status" 
-                name="category_selector" 
-                id="category_selector">
+        <select class="form-select custom-select-dark w-auto" aria-label="Status" name="category_selector"
+            id="category_selector">
             <option value="">Todos</option>
             <option value="stock">Estoque</option>
             <option value="Vendidos">Vendidos</option>
@@ -42,16 +40,41 @@
             </thead>
 
             <tbody>
+                {% for product in products_list %}
                 <tr>
-                    <td class="fw-semibold"><a href="{% url 'create_view' %}">PS3</a></td>
-                    <td>Videogames</td>
-                    <td>4</td>
-                    <td>R$ 400</td>                
-                    <td class="profit">R$ 0</td>
+                    <td class="fw-semibold"><a href="{% url 'create_view' %}">{{product.name }}</a></td>
+                    <td>{{product.category}}</td>
+                    <td>{{product.quantity}}</td>
+                    <td>R$ {{product.cost|floatformat:2}}</td>
+                    <td class="profit-cell">R$ {{product.profit|floatformat:2}}</td>
                     <td>
                         <i class="bi bi-trash delete-icon"></i>
                     </td>
                 </tr>
+                {% endfor %}
+                <script>
+                    document.addEventListener('DOMContentLoaded', (event) => {
+                        const profit_cells = document.getElementsByClassName('profit-cell');
+
+                        Array.from(profit_cells).forEach(sale_value_element => {
+
+                            const raw_value = sale_value_element.textContent;
+
+                            const cleaned_value = raw_value.replace(/[^\d,\-]/g, '').replace(',', '.');
+
+                            const sale_value = parseFloat(cleaned_value);
+
+                            if (!isNaN(sale_value)) {
+                                if (sale_value > 0) {
+                                    sale_value_element.style.color = '#22C55E'; 
+                                } else if (sale_value < 0) {
+                                    sale_value_element.style.color = 'red'; 
+                                } else
+                                    sale_value_element.style.color = 'yellow'; 
+                            }
+                        });
+                    });
+                </script>
             </tbody>
         </table>
     </div>

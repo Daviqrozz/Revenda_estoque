@@ -19,32 +19,28 @@
                 <form method="post">
                     {% csrf_token %}
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control bg-card text-primary border-cor-borda"
-                            id="id_name_mock" name="name" placeholder="Nome do Produto" required
-                            value="Teclado Mecânico X90">
+                        <input type="text" class="form-control bg-card text-primary border-cor-borda" id="id_name_mock"
+                            name="name" placeholder="Nome do Produto" required value="Teclado Mecânico X90">
                         <label for="id_name_mock" class="text-secondary">Nome do Produto</label>
                     </div>
 
                     <label for="id_category_mock" class="form-label text-secondary mb-1">Categoria</label>
-                    
+
                     <div class="mb-3 input-group">
-                        <select class="form-select bg-card text-primary flex-grow-1 border-cor-borda" id="id_category_mock" name="category"
-                            required>
+                        <select class="form-select bg-card flex-grow-1 border-cor-borda" id="id_category_mock"
+                            name="category" required>
                             <option value="" disabled>Selecione a Categoria</option>
                             <option value="1" selected>Periféricos</option>
                             <option value="2">Videogames</option>
                             <option value="3">Acessórios</option>
                         </select>
-                        
-                        <button type="button" 
-                                class="btn btn-success" 
-                                data-bs-toggle="modal" 
-                                data-bs-target="#newCategoryModal"
-                                title="Criar Nova Categoria">
+
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                            data-bs-target="#newCategoryModal" title="Criar Nova Categoria">
                             <i class="bi bi-plus-lg"></i>
                         </button>
                     </div>
-                    
+
                     <div class="form-floating mb-3">
                         <input type="number" class="form-control bg-card text-primary border-cor-borda"
                             id="id_quantity_mock" name="quantity" placeholder="Quantidade" required min="0" value="15">
@@ -65,11 +61,11 @@
                         <label for="id_sale_mock" class="text-secondary">Valor de Venda (R$)</label>
                     </div>
 
+                    <label for="id_observation_mock" class="text-secondary">Observações (Opcional)</label>
                     <div class="form-floating mb-4">
-                        <textarea class="form-control bg-card text-primary border-cor-borda"
-                            id="id_observation_mock" name="observation" placeholder="Observações..."
+                        <textarea class="form-control bg-card text-primary border-cor-borda" id="id_observation_mock"
+                            name="observation" placeholder="Observações..."
                             style="height: 100px">Nova remessa, ótimo estado.</textarea>
-                        <label for="id_observation_mock" class="text-secondary">Observações (Opcional)</label>
                     </div>
 
                     <div class="d-grid gap-2 mt-4">
@@ -93,18 +89,19 @@
 <div class="modal fade" id="newCategoryModal" tabindex="-1" aria-labelledby="newCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content card-dark border-cor-borda text-primary">
-            
+
             <div class="modal-header header-color border-cor-borda">
                 <h5 class="modal-title text-primary" id="newCategoryModalLabel">Criar Nova Categoria</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
-            
-            <form method="post" action="{% url 'create_view' %}"> 
+
+            <form method="post" action="{% url 'create_view' %}">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="form-floating">
-                        <input type="text" class="form-control bg-card text-primary border-cor-borda" 
-                               id="category_name" name="name" placeholder="Nome da Categoria" required>
+                        <input type="text" class="form-control bg-card text-primary border-cor-borda" id="category_name"
+                            name="name" placeholder="Nome da Categoria" required>
                         <label for="category_name" class="text-secondary">Nome da Categoria</label>
                     </div>
                 </div>

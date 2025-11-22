@@ -25,14 +25,18 @@ class Product(models.Model):
         default=STATUS_IN_STOCK,
         verbose_name='Status'
     )
+    
     quantity = models.IntegerField(default=1)
     cost = models.DecimalField(max_digits=10,decimal_places=2)
-    sale_value = models.DecimalField(max_digits=10,decimal_places=2)
+    sale_value = models.DecimalField(max_digits=10,decimal_places=2,null=True,blank=True,default=0)
     cadastred_date = models.DateTimeField(auto_now_add=True)
     
     @property
     def profit(self):
-        return self.sale_value - self.cost
+        if self.sale_value is None:
+            return 0
+        else:
+            return self.sale_value - self.cost
     
     def __str__(self):
         return f"{self.name} | R$ {self.sale_value} | Qtd: {self.quantity}"
