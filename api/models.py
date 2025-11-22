@@ -12,10 +12,11 @@ class Category(models.Model):
 STATUS_IN_STOCK = 1
 STATUS_SALED = 0
 
-STATUS_OPTIONS = {
+STATUS_OPTIONS = (
     (STATUS_IN_STOCK,'Em estoque'),
     (STATUS_SALED,'Vendido')
-}
+)
+
 class Product(models.Model):
     name = models.CharField(max_length=130)
     observation = models.CharField(max_length=200,blank=True,null=True)
