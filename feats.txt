@@ -1,0 +1,5 @@
+feats:
+-Adicionar verificação:se valor de venda !null ou > 0, alterar status para Vendido
+
+fix:
+-Consertar tamanho dos inputs dos formularios

@@ -1,0 +1,28 @@
+<div class="modal fade" id="newCategoryModal" tabindex="-1" aria-labelledby="newCategoryModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content card-dark border-cor-borda text-primary">
+
+            <div class="modal-header header-color border-cor-borda">
+                <h5 class="modal-title text-primary" id="newCategoryModalLabel">Criar Nova Categoria</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+
+            <form method="post" action="{% url 'create_view' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-floating">
+                        <input type="text" class="form-control bg-card text-primary border-cor-borda"
+                            id="category_name" name="name" placeholder="Nome da Categoria" required>
+                        <label for="category_name" class="text-secondary">Nome da Categoria</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Categoria</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -52,7 +52,7 @@
             <tbody>
                 {% for product in products_list %}
                 <tr>
-                    <td class="fw-semibold"><a href="{% url 'create_view' %}">{{product.name }}</a></td>
+                    <td class="fw-semibold"><a href="{% url 'edit_view' product.id %}">{{product.name}}</a></td>
                     <td>{{product.category}}</td>
                     <td>{{product.quantity}}</td>
                     <td>R$ {{product.cost|floatformat:2}}</td>
