@@ -4,7 +4,7 @@
 
 <form method="POST" action="{% url 'edit_view' product.id %}">
     {% csrf_token %}
-
+    <input type="hidden" name="next" value="{% url 'edit_view' product.id %}">
     <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8">
 
@@ -104,6 +104,6 @@
 </form>
 
 
-{% include 'views/modal_category.html' %}
+{% include 'views/modal_category.html' with next_url_return=request.path %}
 
 {% endblock %}

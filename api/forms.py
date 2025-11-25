@@ -1,13 +1,14 @@
 # forms.py
 
 from django import forms
-from .models import Product
+from .models import Product,Category
 
 # Defina a string de classes comuns para facilitar a manutenção
 INPUT_CLASSES = 'form-control bg-card text-primary'
 SELECT_CLASSES = 'form-select bg-card flex-grow-1'
 
 class ProductForm(forms.ModelForm):
+    
     class Meta:
         model = Product
         fields = [
@@ -81,4 +82,18 @@ class ProductForm(forms.ModelForm):
                     'rows':3
                 }
             ),
+        }
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = [
+            'name'
+        ]
+        widgets = {
+            'name':forms.TextInput(
+                attrs={
+                    'class':INPUT_CLASSES,
+                    'placeholder':'Digite o nome da categoria'
+                }
+            )
         }

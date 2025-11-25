@@ -3,69 +3,97 @@
 {% block title %}Cadastrar Produto{% endblock %}
 
 {% block content %}
+<form method="POST" action="{% url 'create_view' %}">
+    {% csrf_token %}
+<input type="hidden" name="next" value="'create_view'">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
 
-<div class="row justify-content-center">
-    <div class="col-lg-6 col-md-8">
+            <div class="card card-dark shadow-soft rounded-3 border-0">
 
-        <div class="card card-dark shadow-soft rounded-3 border-0">
+                <div class="card-header header-color border-bottom border-cor-borda pt-3 pb-2">
+                    <h2 class="card-title text-center mb-0">
+                        <i class="bi bi-box-seam me-2"></i> Cadastrar Produto
+                    </h2>
+                </div>
 
-            <div class="card-header header-color border-bottom border-cor-borda pt-3 pb-2">
-                <h2 class="card-title text-center mb-0">
-                    <i class="bi bi-box-seam me-2"></i> Cadastrar Produto
-                </h2>
-            </div>
+                <div class="card-body p-4">
 
-            <div class="card-body p-4">
-                <form method="post">
-                    {% csrf_token %}
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Erro no Formulário:</strong>
+                        {{ form.non_field_errors }}
+                    </div>
+                    {% endif %}
+
+                    <label for="{{ form.name.id_for_label }}" class="text-secondary">Nome do Produto</label>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control bg-card text-primary border-cor-borda" id="id_name_mock"
-                            name="name" placeholder="Nome do Produto" required>
-                        <label for="id_name_mock" class="text-secondary">Nome do Produto</label>
+                        {{ form.name }}
+                        <label for="{{ form.name.id_for_label }}" class="text-secondary">Nome do Produto</label>
+                        {% if form.name.errors %}
+                        <div class="text-danger small mt-1">{{ form.name.errors }}</div>
+                        {% endif %}
                     </div>
 
-                    <label for="id_category_mock" class="form-label text-secondary mb-1">Categoria</label>
-
+                    <label for="{{ form.category.id_for_label }}"
+                        class="form-label text-secondary mb-1">Categoria</label>
                     <div class="mb-3 input-group">
-                        <select class="form-select bg-card flex-grow-1 border-cor-borda" id="id_category_mock"
-                            name="category" required>
-                            <option value="" disabled>Selecione a Categoria</option>
-                            <option value="1" selected>Periféricos</option>
-                            <option value="2">Videogames</option>
-                            <option value="3">Acessórios</option>
-                        </select>
+                        {{ form.category }}
 
                         <button type="button" class="btn btn-success" data-bs-toggle="modal"
                             data-bs-target="#newCategoryModal" title="Criar Nova Categoria">
                             <i class="bi bi-plus-lg"></i>
                         </button>
                     </div>
+                    {% if form.category.errors %}
+                    <div class="text-danger small mt-1 mb-3">{{ form.category.errors }}</div>
+                    {% endif %}
 
-                    <div class="form-floating mb-3">
-                        <input type="number" class="form-control bg-card text-primary border-cor-borda"
-                            id="id_quantity_mock" name="quantity" placeholder="Quantidade" required min="0" value="15">
-                        <label for="id_quantity_mock" class="text-secondary">Quantidade</label>
+                    <label for="{{ form.status.id_for_label }}" class="form-label text-secondary mb-1">Status</label>
+                    <div class="mb-3">
+                        {{ form.status }}
+                        {% if form.status.errors %}
+                        <div class="text-danger small mt-1">{{ form.status.errors }}</div>
+                        {% endif %}
                     </div>
 
+                    <label for="{{ form.quantity.id_for_label }}" class="text-secondary">Quantidade</label>
                     <div class="form-floating mb-3">
-                        <input type="number" step="0.01" class="form-control bg-card text-primary border-cor-borda"
-                            id="id_cost_mock" name="cost_value" placeholder="Valor de Custo (R$)" required min="0"
-                            value="120.50">
-                        <label for="id_cost_mock" class="text-secondary">Valor de Custo (R$)</label>
+                        {{ form.quantity }}
+                        <label for="{{ form.quantity.id_for_label }}" class="text-secondary">Quantidade</label>
+                        {% if form.quantity.errors %}
+                        <div class="text-danger small mt-1">{{ form.quantity.errors }}</div>
+                        {% endif %}
                     </div>
 
+                    <label for="{{ form.cost.id_for_label }}" class="text-secondary">Valor de Custo (R$)</label>
                     <div class="form-floating mb-3">
-                        <input type="number" step="0.01" class="form-control bg-card text-primary border-cor-borda"
-                            id="id_sale_mock" name="sale_value" placeholder="Valor de Venda (R$)" required min="0"
-                            value="180.00">
-                        <label for="id_sale_mock" class="text-secondary">Valor de Venda (R$)</label>
+                        {{ form.cost }}
+                        <label for="{{ form.cost.id_for_label }}" class="text-secondary">Valor de Custo (R$)</label>
+                        {% if form.cost.errors %}
+                        <div class="text-danger small mt-1">{{ form.cost.errors }}</div>
+                        {% endif %}
                     </div>
 
-                    <label for="id_observation_mock" class="text-secondary">Observações (Opcional)</label>
+                    <label for="{{ form.sale_value.id_for_label }}" class="text-secondary">Valor de Venda (R$)</label>
+                    <div class="form-floating mb-3">
+                        {{ form.sale_value }}
+                        <label for="{{ form.sale_value.id_for_label }}" class="text-secondary">Valor de Venda
+                            (R$)</label>
+                        {% if form.sale_value.errors %}
+                        <div class="text-danger small mt-1">{{ form.sale_value.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <label for="{{ form.observation.id_for_label }}" class="text-secondary">Observações
+                        (Opcional)</label>
                     <div class="form-floating mb-4">
-                        <textarea class="form-control bg-card text-primary border-cor-borda" id="id_observation_mock"
-                            name="observation" placeholder="Observações..."
-                            style="height: 100px">Nova remessa, ótimo estado.</textarea>
+                        {{ form.observation }}
+                        <label for="{{ form.observation.id_for_label }}" class="text-secondary">Observações
+                            (Opcional)</label>
+                        {% if form.observation.errors %}
+                        <div class="text-danger small mt-1">{{ form.observation.errors }}</div>
+                        {% endif %}
                     </div>
 
                     <div class="d-grid gap-2 mt-4">
@@ -73,44 +101,10 @@
                             <i class="bi bi-plus-circle-fill me-2"></i> Salvar Produto
                         </button>
                     </div>
-                </form>
-                <div class="d-grid gap-2 mt-4 w-100">
-                    <a href="/">
-                        <button type="submit" class="btn btn-danger btn-lg shadow-sm w-100">
-                            Cancelar
-                        </button>
-                    </a>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<div class="modal fade" id="newCategoryModal" tabindex="-1" aria-labelledby="newCategoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content card-dark border-cor-borda text-primary">
-
-            <div class="modal-header header-color border-cor-borda">
-                <h5 class="modal-title text-primary" id="newCategoryModalLabel">Criar Nova Categoria</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-            </div>
-
-            <form method="post" action="{% url 'create_view' %}">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <div class="form-floating">
-                        <input type="text" class="form-control bg-card text-primary border-cor-borda" id="category_name"
-                            name="name" placeholder="Nome da Categoria" required>
-                        <label for="category_name" class="text-secondary">Nome da Categoria</label>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Salvar Categoria</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+</form>
+  {% include 'views/modal_category.html' with next_url_return=request.path %}
 {% endblock %}

@@ -2,7 +2,6 @@
 .env
 
 # Banco de Dados
-db.sqlite3
 *.db
 
 # Python
@@ -15,3 +14,5 @@ __pycache__/
 # Diretórios Gerados pelo Docker (Volumes, etc.)
 # Geralmente não precisa, mas adiciona por segurança se houver volumes locais
 /data/
+
+feats.txt
