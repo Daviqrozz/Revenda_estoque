@@ -26,7 +26,6 @@ def product_view(request):
     
     return render(request, 'views/products.html', context)
 
-
 def create_view(request):
     if request.method == "POST":
         form = ProductForm(request.POST)
@@ -49,10 +48,8 @@ def create_category_view(request):
     if request.method == "POST":
         form_category = CategoryForm(request.POST)
         next_url = request.POST.get('next') 
-
         
         print("Valor recebido para NEXT:", next_url) 
-        
         
         print("Dados completos do POST:", request.POST) 
         
@@ -90,3 +87,15 @@ def edit_view(request, id):
     }
     
     return render(request, 'views/edit.html', context)
+
+def delete_view(request, id):
+    product = get_object_or_404(Product,pk=id)
+    
+    if request.method == 'POST':
+        product.delete()
+        return redirect('products_view')
+    
+    return redirect('products_view')
+    
+    
+        
