@@ -89,8 +89,7 @@
                         (Opcional)</label>
                     <div class="form-floating mb-4">
                         {{ form.observation }}
-                        <label for="{{ form.observation.id_for_label }}" class="text-secondary">Observações
-                            (Opcional)</label>
+
                         {% if form.observation.errors %}
                         <div class="text-danger small mt-1">{{ form.observation.errors }}</div>
                         {% endif %}

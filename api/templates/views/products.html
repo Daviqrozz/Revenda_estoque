@@ -53,7 +53,8 @@
                     <td>
                         <div class="d-flex justify-content-center">
                             <button class="btn btn-sm edit-icon">
-                                <i class="bi bi-pen"></i>
+                                <a style="text-decoration: none;"
+                            href="{% url 'edit_view' product.id %}"><i class="bi bi-pen"></i></a>
                             </button>
                             <form action="{% url 'delete_view' product.id %}" method="POST">
                                 {% csrf_token %}

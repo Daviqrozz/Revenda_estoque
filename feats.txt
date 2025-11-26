@@ -1,5 +1,7 @@
 feats:
 -Adicionar verificação:se valor de venda !null ou > 0, alterar status para Vendido
-
+-Adicionar filtros por nome e data/lucro
+-Alert ou modal  de confirmação ao clicar em deletar
 fix:
 -Consertar tamanho dos inputs dos formularios
+-View de deletar categoria
