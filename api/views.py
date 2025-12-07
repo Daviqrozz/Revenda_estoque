@@ -1,7 +1,9 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from .models import Product,STATUS_OPTIONS,Category
 from .forms import ProductForm,CategoryForm
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def product_view(request):
     
     products = Product.objects.all()
@@ -26,6 +28,7 @@ def product_view(request):
     
     return render(request, 'views/products.html', context)
 
+@login_required
 def create_view(request):
     if request.method == "POST":
         form = ProductForm(request.POST)
@@ -44,6 +47,7 @@ def create_view(request):
     
     return render(request, 'views/create.html',context)
 
+@login_required
 def create_category_view(request):
     if request.method == "POST":
         form_category = CategoryForm(request.POST)
@@ -64,7 +68,7 @@ def create_category_view(request):
             return redirect('products_view')
             
     return redirect('products_view')
-
+@login_required
 def edit_view(request, id):
     product = get_object_or_404(Product, pk=id)
 
@@ -87,7 +91,7 @@ def edit_view(request, id):
     }
     
     return render(request, 'views/edit.html', context)
-
+@login_required
 def delete_view(request, id):
     product = get_object_or_404(Product,pk=id)
     

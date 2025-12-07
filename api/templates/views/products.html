@@ -18,7 +18,8 @@
                     Todos</option>
 
                 {% for code, display_name in status_choices %}
-                <option value="{{ code }}" {% if selected_status|safe == code|safe %} selected {% endif %}>{{ display_name}}</option>
+                <option value="{{ code }}" {% if selected_status|safe == code|safe %} selected {% endif %}>
+                    {{display_name}}</option>
                 {% endfor %}
             </select>
         </form>
@@ -52,11 +53,13 @@
                     <td class="profit-cell">R$ {{product.profit|floatformat:2}}</td>
                     <td>
                         <div class="d-flex justify-content-center">
-                            <button class="btn btn-sm edit-icon">
-                                <a style="text-decoration: none;"
-                            href="{% url 'edit_view' product.id %}"><i class="bi bi-pen"></i></a>
-                            </button>
-                            <form action="{% url 'delete_view' product.id %}" method="POST">
+                            <a href="{% url 'edit_view' product.id %}"><button onclick="delete_alert()"
+                                    class="btn btn-sm edit-icon">
+                                    <i class="bi bi-pen"></i>
+                                </button></a>
+
+                            <form action="{% url 'delete_view' product.id %}" method="POST"
+                                onsubmit="return confirm('Tem certeza que deseja excluir este item? Esta ação é irreversível.');">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-sm">
                                     <i class="bi bi-trash delete-icon"></i>
@@ -69,6 +72,7 @@
                 {% endfor %}
                 <script>
                     document.addEventListener('DOMContentLoaded', (event) => {
+
                         const profit_cells = document.getElementsByClassName('profit-cell');
 
                         Array.from(profit_cells).forEach(sale_value_element => {
