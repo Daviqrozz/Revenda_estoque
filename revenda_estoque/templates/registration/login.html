@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Revenda Estoque{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center vh-100" style="margin-top: -50px;">
+    <div class="card shadow-lg border-0 rounded-4" style="max-width: 400px; width: 100%; overflow: hidden;">
+        <div class="card-header bg-primary text-white text-center py-4 border-0">
+            <h3 class="fw-bold mb-0"><i class="bi bi-box-seam me-2"></i>Revenda Estoque</h3>
+            <p class="small mb-0 text-white-50">Bem-vindo de volta!</p>
+        </div>
+        <div class="card-body p-4 p-md-5 bg-white">
+            <h4 class="text-center text-secondary mb-4 fw-bold">Login</h4>
+            
+            {% if form.errors %}
+                <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <div class="small">
+                        Credenciais inválidas. Tente novamente.
+                    </div>
+                </div>
+            {% endif %}
+
+            <form method="post" class="needs-validation" novalidate>
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
+                
+                <div class="mb-4">
+                    <label for="{{ form.username.id_for_label }}" class="form-label text-muted small fw-bold">USUÁRIO</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-0 text-primary"><i class="bi bi-person-fill"></i></span>
+                        {{ form.username }}
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="{{ form.password.id_for_label }}" class="form-label text-muted small fw-bold">SENHA</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-0 text-primary"><i class="bi bi-lock-fill"></i></span>
+                        {{ form.password }}
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 mt-5">
+                    <button type="submit" class="btn btn-primary btn-lg shadow-sm fw-bold rounded-pill">
+                        ENTRAR <i class="bi bi-arrow-right-short ms-1"></i>
+                    </button>
+                </div>
+            </form>
+
+            <div class="text-center mt-4 pt-3 border-top">
+                <a href="{% url 'password_reset' %}" class="text-decoration-none small text-muted hover-link">
+                    Esqueceu sua senha?
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom CSS for Login Page overrides */
+    body {
+        background-color: #f8f9fa; /* Light grey background for contrast */
+    }
+    .hover-link:hover {
+        color: var(--bs-primary) !important;
+        text-decoration: underline !important;
+    }
+    .form-control:focus {
+        box-shadow: none;
+        background-color: #fff;
+    }
+    .input-group-text {
+        font-size: 1.2rem;
+    }
+</style>
+{% endblock %}
