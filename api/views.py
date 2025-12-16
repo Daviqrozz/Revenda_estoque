@@ -1,13 +1,31 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from .models import Product,STATUS_OPTIONS,Category
+from .models import Product,STATUS_OPTIONS,Category,STATUS_SALED,STATUS_IN_STOCK
 from .forms import ProductForm,CategoryForm
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
+from django.utils import timezone
+from datetime import timedelta
 
 @login_required
 def product_view(request):
     
     products = Product.objects.all()
- 
+    
+    thirty_days_ago = timezone.now() - timedelta(days=30)
+
+    recent_products = Product.objects.filter(cadastred_date__gte=thirty_days_ago)
+    
+    new_products_count = recent_products.count()
+
+    sold_recent = recent_products.filter(status=STATUS_SALED)
+    
+    total_sales = sold_recent.aggregate(total=Sum('sale_value'))['total'] or 0
+    total_cost = sold_recent.aggregate(total=Sum('cost'))['total'] or 0
+
+    last_month_balance = total_sales - total_cost
+
+    stock_count = Product.objects.filter(status=STATUS_IN_STOCK).count()
+
     selected_status = request.GET.get('status')
     
     status_filter_value = None
@@ -23,7 +41,10 @@ def product_view(request):
     context = {
         'products_list': products,
         'selected_status': selected_status, 
-        'status_choices': STATUS_OPTIONS,    
+        'status_choices': STATUS_OPTIONS, 
+        'new_products_count': new_products_count,
+        'last_month_balance': last_month_balance,
+        'stock_count': stock_count,   
     }
     
     return render(request, 'views/products.html', context)

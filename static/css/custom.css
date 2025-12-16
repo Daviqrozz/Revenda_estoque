@@ -34,9 +34,6 @@ p, span, h1, h2, h3, h4, h5, h6 {
     background-color: var(--bg-header);
 }
 
-
-
-
 .card-dark {
     background-color: var(--bg-card);
     border: 1px solid var(--border-card); 

@@ -6,6 +6,37 @@
 
 <h3 class="text-center mb-4">Produtos</h3>
 
+<div class="row g-4 mb-4">
+    <!-- Balance Card -->
+    <div class="col-md-4">
+        <div class="card-dark shadow-soft p-4 d-flex flex-column align-items-center justify-content-center h-100 text-center">
+            <h5 class="text-secondary mb-2 fw-bold">Saldo (Últimos 30 dias)</h5>
+            <h2 class="fw-bold mb-0" style="color: {% if last_month_balance >= 0 %}var(--accent-green){% else %}var(--accent-red){% endif %};">
+                R$ {{ last_month_balance|floatformat:2 }}
+            </h2>
+            <small class="text-muted mt-2">Lucro realizado</small>
+        </div>
+    </div>
+
+    <!-- New Products Card -->
+    <div class="col-md-4">
+        <div class="card-dark shadow-soft p-4 d-flex flex-column align-items-center justify-content-center h-100 text-center">
+            <h5 class="text-secondary mb-2 fw-bold">Novos Produtos</h5>
+            <h2 class="fw-bold mb-0" style="color: var(--accent-blue);">{{ new_products_count }}</h2>
+            <small class="text-muted mt-2">Adicionados nos últimos 30 dias</small>
+        </div>
+    </div>
+
+    <!-- Stock Card -->
+    <div class="col-md-4">
+        <div class="card-dark shadow-soft p-4 d-flex flex-column align-items-center justify-content-center h-100 text-center">
+            <h5 class="text-secondary mb-2 fw-bold">Em Estoque</h5>
+            <h2 class="fw-bold mb-0" style="color: #F59E0B;">{{ stock_count }}</h2>
+            <small class="text-muted mt-2">Total de itens disponíveis</small>
+        </div>
+    </div>
+</div>
+
 <div class="card-dark shadow-soft p-3">
 
     <div class="d-flex justify-content-between align-items-center mb-3">

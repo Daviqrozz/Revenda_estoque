@@ -26,7 +26,9 @@ SECRET_KEY = 'django-insecure-qpra+0)@acb^n9--f6ila@zv(jiku_@e!vtu*c1%^dn33xg%5t
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+CSRF_TRUSTED_ORIGINS = ['https://*.pythonanywhere.com']
 
 
 # Application definition
@@ -79,20 +81,27 @@ WSGI_APPLICATION = 'revenda_estoque.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',  # ⬅️ MUDANÇA: Use o backend MySQL
-        'NAME': os.environ.get('DB_NAME'),     # Lê o nome do DB (revenda_db)
-        'USER': os.environ.get('DB_USER'),     # Lê o usuário (django)
-        'PASSWORD': os.environ.get('DB_PASSWORD'), # Lê a senha (1234)
-        'HOST': os.environ.get('DB_HOST'),     # ⬅️ LÊ 'db' (nome do serviço no docker-compose)
-        'PORT': '3306',                        # Porta padrão interna do MySQL
-        'OPTIONS': {
-            # Recomendado para compatibilidade com Django/MySQL
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+if os.environ.get('DB_HOST'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ.get('DB_NAME'),
+            'USER': os.environ.get('DB_USER'),
+            'PASSWORD': os.environ.get('DB_PASSWORD'),
+            'HOST': os.environ.get('DB_HOST'),
+            'PORT': '3306',
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            }
         }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
