@@ -1,7 +1,7 @@
 # forms.py
 
 from django import forms
-from .models import Product,Category
+from .models import Product, Category, Sale
 
 # Defina a string de classes comuns para facilitar a manutenção
 INPUT_CLASSES = 'form-control bg-card text-primary'
@@ -15,8 +15,7 @@ class ProductForm(forms.ModelForm):
             'name',
             'observation',
             'category',
-            'status',
-            'quantity',
+            'quantity_total',
             'cost',
             'sale_value'
         ]
@@ -39,28 +38,20 @@ class ProductForm(forms.ModelForm):
                 }
             ),
             
-            # 3. Campo 'status': Select para choices
-            'status': forms.Select(
-                attrs={
-                    'class': SELECT_CLASSES,
-                    'required': True
-                }
-            ),
-            
-            # 4. Campo 'quantity': NumberInput para Inteiros
-            'quantity': forms.NumberInput(
+            # 3. Campo 'quantity_total': NumberInput para Inteiros
+            'quantity_total': forms.NumberInput(
                 attrs={
                     'class': INPUT_CLASSES,
-                    'placeholder': 'Quantidade',
+                    'placeholder': 'Ex: 10 unidades',
                     'min': 0 # Adiciona a restrição min="0" diretamente
                 }
             ),
             
-            # 5. Campos de Valor (Cost e Sale_value): NumberInput para Decimais
+            # 4. Campos de Valor (Cost e Sale_value): NumberInput para Decimais
             'cost': forms.NumberInput(
                 attrs={
                     'class': INPUT_CLASSES,
-                    'placeholder': 'Valor de Custo (R$)',
+                    'placeholder': 'Ex: R$ 50,00 (por unidade)',
                     'min': 0,
                     'step': '0.01' # Para permitir valores decimais
                 }
@@ -68,13 +59,13 @@ class ProductForm(forms.ModelForm):
             'sale_value': forms.NumberInput(
                 attrs={
                     'class': INPUT_CLASSES,
-                    'placeholder': 'Valor de Venda (R$)',
+                    'placeholder': 'Ex: R$ 80,00 (por unidade) - Opcional',
                     'min': 0,
                     'step': '0.01'
                 }
             ),
             
-            # 6. Campo 'observation': Textarea para textos longos
+            # 5. Campo 'observation': Textarea para textos longos
             'observation': forms.Textarea(
                 attrs={
                     'class':INPUT_CLASSES,
@@ -97,3 +88,51 @@ class CategoryForm(forms.ModelForm):
                 }
             )
         }
+
+class SaleForm(forms.ModelForm):
+    class Meta:
+        model = Sale
+        fields = ['product', 'quantity', 'price_sold']
+        
+        widgets = {
+            'product': forms.Select(
+                attrs={
+                    'class': SELECT_CLASSES,
+                    'required': True
+                }
+            ),
+            'quantity': forms.NumberInput(
+                attrs={
+                    'class': INPUT_CLASSES,
+                    'placeholder': 'Quantidade a Vender',
+                    'min': 1
+                }
+            ),
+            'price_sold': forms.NumberInput(
+                attrs={
+                    'class': INPUT_CLASSES,
+                    'placeholder': 'Valor de Venda (R$)',
+                    'min': 0,
+                    'step': '0.01'
+                }
+            ),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Filter products to only show those with stock
+        from .models import Product
+        self.fields['product'].queryset = Product.objects.filter(quantity_total__gt=0)
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        product = cleaned_data.get('product')
+        quantity = cleaned_data.get('quantity')
+        
+        if product and quantity:
+            if quantity > product.quantity_in_stock:
+                raise forms.ValidationError(
+                    f'Quantidade indisponível. Estoque atual: {product.quantity_in_stock} unidades.'
+                )
+        
+        return cleaned_data

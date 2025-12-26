@@ -1,6 +1,6 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from .models import Product,STATUS_OPTIONS,Category,STATUS_SALED,STATUS_IN_STOCK
-from .forms import ProductForm,CategoryForm
+from .models import Product, Category, Sale
+from .forms import ProductForm, CategoryForm, SaleForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django.utils import timezone
@@ -17,31 +17,44 @@ def product_view(request):
     
     new_products_count = recent_products.count()
 
-    sold_recent = recent_products.filter(status=STATUS_SALED)
+    # Calculate balance from Sale records in the last 30 days
+    recent_sales = Sale.objects.filter(created_at__gte=thirty_days_ago)
     
-    total_sales = sold_recent.aggregate(total=Sum('sale_value'))['total'] or 0
-    total_cost = sold_recent.aggregate(total=Sum('cost'))['total'] or 0
-
+    total_sales = recent_sales.aggregate(total=Sum('price_sold'))['total'] or 0
+    
+    # Calculate total cost for sold items (cost per unit * quantity sold)
+    total_cost = 0
+    for sale in recent_sales:
+        total_cost += sale.product.cost * sale.quantity
+    
     last_month_balance = total_sales - total_cost
 
-    stock_count = Product.objects.filter(status=STATUS_IN_STOCK).count()
+    # Count products with stock available
+    stock_count = sum(1 for p in Product.objects.all() if p.quantity_in_stock > 0)
 
-    selected_status = request.GET.get('status')
+    # Optional: Filter by stock status
+    stock_filter = request.GET.get('stock')
     
-    status_filter_value = None
-    
-    if selected_status and selected_status.isdigit():
- 
-        status_filter_value = int(selected_status)
-        
-    if status_filter_value is not None:
+    if stock_filter == 'in_stock':
+        products = [p for p in products if p.quantity_in_stock > 0]
+    elif stock_filter == 'sold_out':
+        products = [p for p in products if p.quantity_in_stock <= 0]
 
-        products = products.filter(status=status_filter_value)
+    # Pagination
+    from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+    page = request.GET.get('page', 1)
+    paginator = Paginator(products, 10) # 10 products per page
+
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
 
     context = {
         'products_list': products,
-        'selected_status': selected_status, 
-        'status_choices': STATUS_OPTIONS, 
+        'stock_filter': stock_filter,
         'new_products_count': new_products_count,
         'last_month_balance': last_month_balance,
         'stock_count': stock_count,   
@@ -121,6 +134,36 @@ def delete_view(request, id):
         return redirect('products_view')
     
     return redirect('products_view')
+
+@login_required
+def sell_product_view(request, id):
+    product = get_object_or_404(Product, pk=id)
     
-    
+    if request.method == 'POST':
+        form = SaleForm(request.POST)
         
+        if form.is_valid():
+            sale = form.save(commit=False)
+            
+            # Double-check stock availability
+            if sale.quantity > product.quantity_in_stock:
+                form.add_error('quantity', f'Quantidade indisponível. Estoque atual: {product.quantity_in_stock}')
+            else:
+                sale.save()
+                return redirect('products_view')
+    else:
+        # Pre-fill the form with the selected product
+        form = SaleForm(initial={
+            'product': product,
+            'price_sold': product.sale_value,
+            'quantity': 1
+        })
+    
+    context = {
+        'form': form,
+        'product': product,
+    }
+    
+    return render(request, 'views/sell.html', context)
+    
+    

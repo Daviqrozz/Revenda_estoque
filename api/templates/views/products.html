@@ -9,30 +9,33 @@
 <div class="row g-4 mb-4">
     <!-- Balance Card -->
     <div class="col-md-4">
-        <div class="card-dark shadow-soft p-4 d-flex flex-column align-items-center justify-content-center h-100 text-center">
+        <div
+            class="card-dark shadow-soft p-4 d-flex flex-column align-items-center justify-content-center h-100 text-center">
             <h5 class="text-secondary mb-2 fw-bold">Saldo (Últimos 30 dias)</h5>
-            <h2 class="fw-bold mb-0" style="color: {% if last_month_balance >= 0 %}var(--accent-green){% else %}var(--accent-red){% endif %};">
+            <h2 class="fw-bold mb-0 {% if last_month_balance >= 0 %}text-success{% else %}text-danger{% endif %}">
                 R$ {{ last_month_balance|floatformat:2 }}
             </h2>
-            <small class="text-muted mt-2">Lucro realizado</small>
+            <small style="color: white;" class="mt-2">Lucro realizado</small>
         </div>
     </div>
 
     <!-- New Products Card -->
     <div class="col-md-4">
-        <div class="card-dark shadow-soft p-4 d-flex flex-column align-items-center justify-content-center h-100 text-center">
+        <div
+            class="card-dark shadow-soft p-4 d-flex flex-column align-items-center justify-content-center h-100 text-center">
             <h5 class="text-secondary mb-2 fw-bold">Novos Produtos</h5>
-            <h2 class="fw-bold mb-0" style="color: var(--accent-blue);">{{ new_products_count }}</h2>
-            <small class="text-muted mt-2">Adicionados nos últimos 30 dias</small>
+            <h2 class="fw-bold mb-0 text-info">{{ new_products_count }}</h2>
+            <small style="color: white;" class="mt-2">Adicionados nos últimos 30 dias</small>
         </div>
     </div>
 
     <!-- Stock Card -->
     <div class="col-md-4">
-        <div class="card-dark shadow-soft p-4 d-flex flex-column align-items-center justify-content-center h-100 text-center">
+        <div
+            class="card-dark shadow-soft p-4 d-flex flex-column align-items-center justify-content-center h-100 text-center">
             <h5 class="text-secondary mb-2 fw-bold">Em Estoque</h5>
-            <h2 class="fw-bold mb-0" style="color: #F59E0B;">{{ stock_count }}</h2>
-            <small class="text-muted mt-2">Total de itens disponíveis</small>
+            <h2 class="fw-bold mb-0 text-warning">{{ stock_count }}</h2>
+            <small style="color: white;" class="mt-2">Total de itens disponíveis</small>
         </div>
     </div>
 </div>
@@ -40,20 +43,6 @@
 <div class="card-dark shadow-soft p-3">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
-
-        <form method="GET" action="{% url 'products_view' %}" id="status-filter-form">
-            <select class="form-select custom-select-dark w-auto" name="status"
-                onchange="document.getElementById('status-filter-form').submit();">
-
-                <option value="TODOS" {% if selected_status == 'TODOS' or selected_status is None %} selected {% endif %}>
-                    Todos</option>
-
-                {% for code, display_name in status_choices %}
-                <option value="{{ code }}" {% if selected_status|safe == code|safe %} selected {% endif %}>
-                    {{display_name}}</option>
-                {% endfor %}
-            </select>
-        </form>
 
         <a href="{% url 'create_view' %}" class="btn btn-success">
             <i class="bi bi-plus-lg"></i> Cadastrar
@@ -66,9 +55,12 @@
                 <tr>
                     <th>Nome</th>
                     <th>Categoria</th>
-                    <th>Quantidade</th>
-                    <th>Valor de compra</th>
-                    <th>Lucro</th>
+                    <th>Total</th>
+                    <th>Vendido</th>
+                    <th>Estoque</th>
+                    <th>Custo Unit.</th>
+                    <th>Preço Médio Venda</th>
+                    <th>Lucro Total</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -79,13 +71,28 @@
                     <td class="fw-semibold"><a class="text-white" style="text-decoration: none;"
                             href="{% url 'edit_view' product.id %}">{{product.name}}</a></td>
                     <td>{{product.category}}</td>
-                    <td>{{product.quantity}}</td>
-                    <td>R$ {{product.cost|floatformat:2}}</td>
-                    <td class="profit-cell">R$ {{product.profit|floatformat:2}}</td>
+                    <td>{{product.quantity_total}}</td>
+                    <td>{{product.quantity_sold}}</td>
                     <td>
-                        <div class="d-flex justify-content-center">
-                            <a href="{% url 'edit_view' product.id %}"><button onclick="delete_alert()"
-                                    class="btn btn-sm edit-icon">
+                        {{product.quantity_in_stock}}
+                        {% if product.is_sold_out %}
+                        <span class="badge bg-danger ms-1">Esgotado</span>
+                        {% endif %}
+                    </td>
+                    <td>R$ {{product.cost|floatformat:2}}</td>
+                    <td>R$ {{product.average_sale_price|floatformat:2}}</td>
+                    <td class="profit-cell">R$ {{product.total_profit|floatformat:2}}</td>
+                    <td>
+                        <div class="d-flex justify-content-center gap-1">
+                            {% if not product.is_sold_out %}
+                            <a href="{% url 'sell_product_view' product.id %}">
+                                <button class="btn btn-sm btn-success" title="Vender">
+                                    <i class="bi bi-cart-plus"></i>
+                                </button>
+                            </a>
+                            {% endif %}
+
+                            <a href="{% url 'edit_view' product.id %}"><button class="btn btn-sm edit-icon">
                                     <i class="bi bi-pen"></i>
                                 </button></a>
 
@@ -128,6 +135,49 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Pagination Controls -->
+    {% if products_list.has_other_pages %}
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if products_list.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ products_list.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">&laquo;</span>
+            </li>
+            {% endif %}
+
+            {% for i in products_list.paginator.page_range %}
+            {% if products_list.number == i %}
+            <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ i }}">
+                    {{ i }}
+                </a>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+            {% if products_list.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ products_list.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">&raquo;</span>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
 
 </div>
 
